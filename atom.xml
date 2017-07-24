@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://wzfstat.github.io/"/>
-  <updated>2017-07-19T03:18:26.993Z</updated>
+  <updated>2017-07-22T05:14:46.911Z</updated>
   <id>http://wzfstat.github.io/</id>
   
   <author>
@@ -16,13 +16,19 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>My New Post</title>
-    <link href="http://wzfstat.github.io/2017/07/18/My-New-Post/"/>
-    <id>http://wzfstat.github.io/2017/07/18/My-New-Post/</id>
+    <title>Boosting</title>
+    <link href="http://wzfstat.github.io/2017/07/18/boosting/"/>
+    <id>http://wzfstat.github.io/2017/07/18/boosting/</id>
     <published>2017-07-19T03:18:26.000Z</published>
-    <updated>2017-07-19T03:18:26.993Z</updated>
+    <updated>2017-07-22T05:14:46.911Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="Boosting"><a href="#Boosting" class="headerlink" title="Boosting"></a>Boosting</h1><p>Boosting is a way of fitting an additive expansion in a set of elementary “basis” functions:</p>
+<script type="math/tex; mode=display">f(x) = \sum_{m=1}^M\beta_m b(x;\gamma_m),</script><p>where <script type="math/tex">\beta_m\in\mathbb R</script> and <script type="math/tex">b(\cdot;\gamma_m)</script> are basis functions/models.</p>
+]]></content>
     
     <summary type="html">
+    
+      &lt;h1 id=&quot;Boosting&quot;&gt;&lt;a href=&quot;#Boosting&quot; class=&quot;headerlink&quot; title=&quot;Boosting&quot;&gt;&lt;/a&gt;Boosting&lt;/h1&gt;&lt;p&gt;Boosting is a way of fitting an additive expan
     
     </summary>
     
