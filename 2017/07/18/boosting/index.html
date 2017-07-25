@@ -1,3 +1,96 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> Boosting · StatML.io - Statistical Machine Learning</title><meta name="description" content="Boosting - StatML"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="http://wzfstat.github.io/atom.xml" title="StatML.io - Statistical Machine Learning"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">WEIBO</a></li><li class="nav-list-item"><a href="https://github.com/wzfstat" target="_blank" class="nav-list-link">GITHUB</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">Boosting</h1><div class="post-info">Jul 18, 2017</div><div class="post-content"><h1 id="boosting">Boosting</h1>
-<p>Boosting is a way of fitting an additive expansion in a set of elementary “basis” functions: <span class="math display">\[f(x) = \sum_{m=1}^M\beta_m b(x;\gamma_m),\]</span> where <span class="math inline">\(\beta_m\in\mathbb R\)</span> and <span class="math inline">\(b(\cdot;\gamma_m)\)</span> are basis functions/models.</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> Introduction to Boosting · StatML.io - Statistical Machine Learning</title><meta name="description" content="Introduction to Boosting - StatML"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="http://wzfstat.github.io/atom.xml" title="StatML.io - Statistical Machine Learning"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">WEIBO</a></li><li class="nav-list-item"><a href="https://github.com/wzfstat" target="_blank" class="nav-list-link">GITHUB</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">Introduction to Boosting</h1><div class="post-info">Jul 18, 2017</div><div class="post-content"><h2 id="boosting-additive-model">Boosting: Additive Model</h2>
+<ol style="list-style-type: decimal">
+<li><p>Boosting is a way of fitting an additive expansion in a set of elementary “basis” functions: <span class="math display">\[f(x) = \sum_{m=1}^M\beta_m b(x;\gamma_m),\]</span> where <span class="math inline">\(\beta_m\in\mathbb R\)</span> and <span class="math inline">\(b(\cdot;\gamma_m)\)</span> are basis functions/models.</p></li>
+<li><p>Typically these models are fit by minimizing a loss function averaged over the training data: <span class="math display">\[\min_{\{\beta_m,\gamma_m\}_1^M}\sum_{i=1}^n L\Big(y_i, \sum_{m=1}^M\beta_m b(x_i;\gamma_m)\Big).~~~~~ (1)\]</span> <em>Example</em>: <span class="math inline">\(L(y, f(x)) = (y - f(x))^2\)</span>.</p></li>
+</ol>
+<h2 id="forward-stagewise-additive-modeling">Forward Stagewise Additive Modeling</h2>
+<ol style="list-style-type: decimal">
+<li>For many loss functions/basis functions, solving (1) is computationally intensive. A simple alternative is called <span style="color:DodgerBlue"><strong>forward stagewise modeling</strong></span>, which <span style="color:Crimson">approximates</span> the solution by sequentially adding new basis functions to the expansion without adjusting the parameters and coefficients of those that have already been added. <br><br> <font size="3" ,="" color="Blue"><strong>Algorithm 1</strong></font> <em>Forward Stagewise Additive Modeling (FSAM)</em>.</li>
+</ol>
+<blockquote>
+<ol style="list-style-type: lower-alpha">
+<li>Initialize <span class="math inline">\(f_0(x) = 0\)</span>.</li>
+<li>For <span class="math inline">\(m = 1\)</span> to <span class="math inline">\(M\)</span>:<br> &gt; (i). Compute <span class="math display">\[(\beta_m, \gamma_m) = \arg\min_{\beta,\gamma}\sum_{i=1}^nL(y_i,f_{m-1}(x_i)+\beta b(x_i;\gamma)).\]</span> &gt; (ii). Set <span class="math inline">\(f_m(x) = f_{m-1}(x) + \beta_m b(x; \gamma_m)\)</span>.</li>
+</ol>
+</blockquote>
+<ol start="2" style="list-style-type: decimal">
+<li>For squared-error loss, we have <span class="math display">\[L(y_i, f_{m-1}(x_i)+\beta b(x_i;\gamma)) = (\underbrace{y_i-f_{m-1}(x_i)}_{residual}-\beta b(x_i;\gamma))^2,\]</span> where <span class="math inline">\(y_i - f_{m-1}(x_i)\)</span> is simply the residual of the current model on the <span class="math inline">\(i\)</span>th observation. <br><br> Thus, in regression, we find <span class="math inline">\(\beta_m b(x; \gamma_m)\)</span> that <strong>best fits the current residuals</strong>.</li>
+</ol>
+<h2 id="exponential-loss-and-adaboost">Exponential Loss and AdaBoost</h2>
+<ol style="list-style-type: decimal">
+<li>For classification, we should consider other loss functions, such as logistic loss and exponential loss.<br> We can show that the famous <font color="DodgerBlue"><strong>AdaBoost</strong></font> algorithm (not shown here) is equivalent to <strong>FSAM (Algorithm 1</strong>) using the <font color="LimeGreen">exponential loss function</font> <span class="math display">\[L(y, f(x)) = exp(-y f(x)).\]</span> <br><br></li>
+<li>Using exponential loss, FSAM requires to solve <span class="math display">\[(\beta_m, \gamma_m) = \arg\min_{\beta,\gamma}\sum_{i=1}^n exp[-y_i(f_{m-1}(x_i) + \beta G(x_i))],\]</span> where <span class="math inline">\(G(x_i)\in\{-1,1\}\)</span> are individual classifiers. This can be expressed as <span class="math display">\[(\beta_m, \gamma_m) = \arg\min_{\beta,\gamma}\sum_{i=1}^n w_i^{(m)}exp(-\beta y_i G(x_i))~~~~~ (2)\]</span> with <span class="math inline">\(w_i^{(m)} = exp(-y_i f_{m-1}(x_i))\)</span>. <br><br> It can be shown that the solution of (2) is <span class="math display">\[\begin{cases}G_m = \arg\min_G\sum_{i=1}^n w_i^{(m)}I(y_i\ne G(x_i)),\\\beta_m = \frac{1}{2}\log\frac{1-\text{err}_m}{\text{err}_m},\end{cases}\]</span> where <span class="math inline">\(\text{err}_m = \frac{\sum_{i=1}^N w_i^{(m)}I(y_i\ne G_m(x_i))}{\sum_{i=1}^n w_i^{(m)}}\)</span>. <br><br> Therefore, <span class="math inline">\(G_m\)</span> should be a <em>weighted</em> classifier (with weights <span class="math inline">\(w_i^{(m)}\)</span>). <br><br></li>
+<li>Clearly, Adaboost is not optimizing <strong>misclassification error</strong>, but approximates it using the exponential loss, which is more sensitive to changes in the estimated class probabilities and results in a simple algorithm. <br><br></li>
+<li>From statistical perspective, even though <span class="math inline">\(e^{-Yf}\)</span> is not a proper log-likelihood, it leads to the same solution as that of logistic loss at the <strong>population level</strong>.</li>
+</ol>
+<h2 id="boosting-trees">Boosting Trees</h2>
+<ol style="list-style-type: decimal">
+<li>As an example, boosted trees are widely used in applications. <br> <strong>Tree Review</strong>: Trees partition the feature space into disjoint regions <span class="math inline">\(R_j, j = 1, 2,\cdots, J\)</span> (the terminal nodes), and assign a <strong>score</strong> <span class="math inline">\(\gamma_j\)</span> to each <strong>region</strong> <span class="math inline">\(R_j\)</span>. Then the predictive rule is <span class="math display">\[x\in R_j \Rightarrow f(x) = \gamma_j,\]</span> and the tree can be expressed as <span class="math display">\[ T(x;\Theta) = \sum_{j=1}^J\gamma_j \cdot I(x\in R_j)\]</span> with parameters <span class="math inline">\(\Theta = \{R_j,\gamma_j\}_1^J\)</span>. <br><br></li>
+<li><strong>Tree Review (cont’d)</strong>: The parameter estimation is equivalent to <span class="math display">\[\hat{\Theta} = \arg\min_{\Theta} \sum_{j=1}^J \sum_{x_i\in R_j} L(y_i,\gamma_j).\]</span> Instead of solving the problem directly, people usually use a <font color="DodgerBlue">greedy</font> algorithm to find a <em><font color="Crimson">suboptimal</font></em> tree. <br> We could divide optimization problem into two parts:</li>
+</ol>
+<blockquote>
+<ol style="list-style-type: lower-alpha">
+<li>Finding <span class="math inline">\(R_j\)</span>.<br></li>
+<li>Finding <span class="math inline">\(\gamma_j\)</span> given <span class="math inline">\(R_j\)</span>. <br><br> * Part (b) is simple even for a general loss function (e.g., we use average response in regression and majority vote in classification). <br> * For classification, it is sometimes necessary to <strong>approximate misclassification error</strong> by a more convenient one in part (a), such as Gini index and cross entropy.</li>
+</ol>
+</blockquote>
+<ol start="3" style="list-style-type: decimal">
+<li>The <strong><font color="DodgerBlue">boosted tree model</font></strong> is a sum of trees, <span class="math display">\[f_M(x) = \sum_{m=1}^M T(x;\Theta_m).\]</span> * The <span class="math inline">\(\beta\)</span> in (1) has been absorbed into <span class="math inline">\(\gamma_j\)</span> estimation. <br><br> In FSAM, we have to solve <span class="math display">\[ \hat{\Theta}_m = \arg\min_{\Theta_m} \sum_{i=1}^n L(y_i, f_{m-1}(x_i)+T(x_i;\Theta_m)).~~~~~ (3)\]</span></li>
+</ol>
+<blockquote>
+<ol style="list-style-type: lower-alpha">
+<li>For <strong>squared-error loss</strong>, it is simply the <em><font color="LimeGreen">regression tree</font></em> that best predicts the current residuals <span class="math inline">\(y_i - f_{m-1}(xi)\)</span>, and <span class="math inline">\(\hat\gamma_j\)</span> is the mean of these residuals in <span class="math inline">\(R_j\)</span>.</li>
+<li>For <strong>two-class classification</strong> and <strong>exponential loss</strong>, it is equivalent to <em><font color="LimeGreen">AdaBoost using classification trees</font></em>.</li>
+<li>For a general (differentiable) loss function, FSAM may not be simple. We refer to Gradient Boosting for fast approximate algorithms.</li>
+</ol>
+</blockquote>
+<h2 id="gradient-boosting">Gradient Boosting</h2>
+<p>Gradient boosting borrows the idea of gradient descent to approximately solve (3) with any differentiable loss function.</p>
+<ol style="list-style-type: decimal">
+<li><p>Gradient descent revisited. <br><br> Let us go back to the loss function <span class="math display">\[L(f) = \sum_{i=1}^nL(y_i,f(x_i)).\]</span> Ignoring the constraint that <span class="math inline">\(f\)</span> is a summation, it can be viewed as <span class="math display">\[\hat{f} = \arg\min_f L(f),  ~~~~~ (4)\]</span> and <font color="DodgerBlue">gradient descent update</font> is <span class="math display">\[\mathbf{f}_{m+1} = \mathbf{f}_m - \rho_m \mathbf{g}_m,\]</span> where <span class="math inline">\(\mathbf{f}_m = [f_m(x_1),\cdots,f_m(x_n)]^\top\)</span>, <span class="math inline">\(\rho_m\)</span> is the step size and the components of the gradient <span class="math inline">\(\mathbf g_m\)</span> are <span class="math display">\[g_{m,i} = \Bigg[\frac{\partial L(y_i,f(x_i))}{\partial f(x_i)}\Bigg]_{f(x_i) = f_m(x_i)}.\]</span> <br> Therefore, the final solution has an additive form: <span class="math display">\[\mathbf{f}_M = \mathbf{f}_0 - \sum_{m=0}^{M-1} \rho_m \mathbf{g}_m,\]</span> where <span class="math inline">\(\mathbf{f}_0\)</span> is a random guess. <br><br> Indeed, the gradient descent would be the preferred strategy if minimizing the loss is our only goal. But it has <strong><font color="Crimson">no generalization ability</font></strong>, since the gradient is defined only at the training data. <br><br></p></li>
+<li><p>Gradient Tree Boosting. (<span class="math inline">\(\mathbf{GradientBoosting}\)</span> in <span class="math inline">\(\mathbf{Python}\)</span>) <br><br> To integrate the idea of gradient descent, one could induce a tree <span class="math inline">\(T(x; \Theta_m)\)</span> (or other model) at the <span class="math inline">\(m\)</span>th iteration whose predictions are as close as possible to <span class="math inline">\(-\mathbf g_m\)</span>. Using the following squared-error to measure closeness leads to a regression tree, <span class="math display">\[\tilde\Theta_m = \arg\min_\Theta \sum_{i=1}^n(-g_{m,i}-T(x_i;\Theta))^2.\]</span> Then <span class="math display">\[\gamma_{m,j} = \arg\min_\gamma \sum_{x_i\in R_{m,j}}L(y_i,f_m(x_i)+\gamma).\]</span> Finally, update <span class="math display">\[f_{m+1}(x) = f_m(x) + \sum_{j=1}^{J_m}\gamma_{m,j} I(x\in R_{m,j}). ~~~~~ (5)\]</span></p></li>
+<li><p>Gradient Boosting = Gradient Descent + Boosting. <br><br> Intuition:</p></li>
+</ol>
+<blockquote>
+<ol style="list-style-type: lower-alpha">
+<li>In each stage, introduce a weak learner to compensate the shortcomings of existing weak learners.</li>
+<li>In Adaboost, “shortcomings” are identified by high-weight data points.</li>
+<li>In Gradient Boosting, “shortcomings” are identified by gradients.</li>
+</ol>
+</blockquote>
+<p>      A <em>general</em> gradient boosting algorithm is given as follows <img src="http://upload-images.jianshu.io/upload_images/1825085-22e64118df8aede5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" title="Gradient Boosting Algorithm" alt="alt text"></p>
+<h2 id="xgboost-newton-boosting">XGBoost (Newton Boosting)</h2>
+<ol style="list-style-type: decimal">
+<li><p>Gradient boosting originates from gradient descent, then how about <strong>Newton methods</strong>? Since we treat <span class="math inline">\(f(x_i)\)</span> as unknown and so (4) is a one-dimensional optimization problem, Newton-type method is also feasible. <br><br> <a href="https://web.stanford.edu/~hastie/Papers/AdditiveLogisticRegression/alr.pdf" target="_blank" rel="external">Friedman et al. (2000)</a> proposed modified algorithms using <font color="DodgerBlue">Newton stepping</font> rather than exact optimization (or gradient descent) at each step. They solved a weighted regression problem to fit <span class="math inline">\(-\frac{g_{m,i}}{h_{m,i}}\)</span> with <span class="math display">\[h_{m,i} = \Bigg[\frac{\partial L^2(y_i,f(x_i))}{\partial^2 f(x_i)}\Bigg]_{f(x_i) = f_m(x_i)}.\]</span> <br></p></li>
+<li><p>Recently, <font color="Crimson">XGBoost</font> uses regression trees as the base model, and it will be much easier to integrate the Newton step (second-order approximation) into tree induction. <br><br> It considers the following variant of problem (3): <span class="math display">\[\min_{\Theta_m} \sum_{i=1}^n L(y_i, f_{m-1}(x_i)+T(x_i;\Theta_m)) + \eta|T_m|+\lambda\sum_{j=1}^{J_m}\gamma_j^2,~~~~~ (6)\]</span> where <span class="math inline">\(|T_m|\)</span> is the number of leaves of the tree <span class="math inline">\(T(x;\Theta_m)\)</span>. <br><br> We take the <em><font color="LimeGreen">second-order Taylor expansion</font></em> of <span class="math inline">\(L(y_i,\cdot)\)</span> at <span class="math inline">\(f_{m-1}(x_i)\)</span>: <span class="math display">\[\begin{aligned}
+&amp;\sum_{i=1}^n L(y_i, f_{m-1}(x_i)+T(x_i;\Theta_m))\\
+=\,&amp;\sum_{i=1}^n \Big[L(y_i,f_{m-1}(x_i)) + g_{m,i}T(x_i;\Theta_m) + \frac{1}{2}h_{m,i}T^2(x_i;\Theta_m)\Big].
+\end{aligned}\]</span> Therefore, (6) becomes <span class="math display">\[\min_{\Theta_m} \sum_{i=1}^n \Big[g_{m,i}T(x_i;\Theta_m) + \frac{1}{2}h_{m,i}T^2(x_i;\Theta_m)\Big] + \eta|T_m|+\lambda\sum_{j=1}^{J_m}\gamma_j^2.\]</span> It is easy to design a simple tree-growing algorithm according to the criterion above (omit detail). Actually, minimizing the loss part only is equivalent to fitting a regression tree to the Newton step <span class="math inline">\(-g_{m,i}/h_{m,i}\)</span> with weight <span class="math inline">\(h_{m,i}\)</span>, this can be seen from <span class="math display">\[\begin{aligned}
+&amp;\arg\min_{\Theta_m} \sum_{i=1}^n \Big[g_{m,i}T(x_i;\Theta_m) + \frac{1}{2}h_{m,i}T^2(x_i;\Theta_m)\Big]\\
+=\,&amp;\arg\min_{\Theta_m} \sum_{i=1}^n h_{m,i}\Big[2\frac{g_{m,i}}{h_{m,i}}T(x_i;\Theta_m) + T^2(x_i;\Theta_m)\Big]\\
+=\,&amp;\arg\min_{\Theta_m} \sum_{i=1}^n h_{m,i}\Big[ T(x_i;\Theta_m) + \frac{g_{m,i}}{h_{m,i}}\Big]^2.
+\end{aligned}\]</span> Therefore, <strong>gradient boosting is a special case of newton boosting</strong> when all <span class="math inline">\(h_{m,i}\)</span> are set to be 1.</p></li>
+<li><p>The main benefits of XGBoost</p></li>
+</ol>
+<blockquote>
+<ol style="list-style-type: lower-alpha">
+<li>Involving second-order information may give <strong>faster convergence</strong> (the idea is not novel).</li>
+<li>Explicitly add <strong>regularizations</strong> to the overall objective.</li>
+<li>Accept sparse data and automatically deal with <strong>missing values</strong>.</li>
+<li><strong>Parallel</strong> the tree-growing algorithm.</li>
+</ol>
+</blockquote>
+<h2 id="regularization">Regularization</h2>
+<ol style="list-style-type: decimal">
+<li><strong>Shrinkage (learning rate):</strong> The simplest shrinkage is to scale the contribution of each base learner by a factor <span class="math inline">\(\nu\in(0,1)\)</span>, i.e., (5) becomes <span class="math display">\[f_{m+1}(x) = f_m(x) + \nu\sum_{j=1}^{J_m}\gamma_{m,j} I(x\in R_{m,j}).\]</span></li>
+</ol>
+<blockquote>
+<ol style="list-style-type: lower-alpha">
+<li>The parameter <span class="math inline">\(\nu\)</span> can be regarded as controlling the <strong>learning rate</strong> of the boosting procedure.</li>
+<li>Smaller values of <span class="math inline">\(\nu\)</span> lead to larger values of <span class="math inline">\(M\)</span>.</li>
+</ol>
+</blockquote>
+<ol start="2" style="list-style-type: decimal">
+<li><strong>Subsampling (stochastic gradient boosting):</strong>At each iteration we sample a subset of the training observations without replacement. (Not only reduce the computing time, but produce a more accurate model in many cases.)</li>
+</ol>
 </div></article></div></main><footer><div class="paginator"><a href="/2017/07/18/hello-world/" class="next">NEXT</a></div><div class="copyright"><p>© 2017 <a href="http://wzfstat.github.io">StatML</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-65933410-1",'auto');ga('send','pageview');</script></body></html>
