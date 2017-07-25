@@ -13,6 +13,22 @@
 <li>For <span class="math inline">\(m = 1\)</span> to <span class="math inline">\(M\)</span>:<br> &gt; (i). Compute <span class="math display">\[(\beta_m, \gamma_m) = \arg\min_{\beta,\gamma}\sum_{i=1}^nL(y_i,f_{m-1}(x_i)+\beta b(x_i;\gamma)).\]</span> &gt; (ii). Set <span class="math inline">\(f_m(x) = f_{m-1}(x) + \beta_m b(x; \gamma_m)\)</span>.</li>
 </ol>
 </blockquote>
+<a id="more"></a>
+<h2 id="boosting-additive-model-1">Boosting: Additive Model</h2>
+<ol style="list-style-type: decimal">
+<li><p>Boosting is a way of fitting an additive expansion in a set of elementary “basis” functions: <span class="math display">\[f(x) = \sum_{m=1}^M\beta_m b(x;\gamma_m),\]</span> where <span class="math inline">\(\beta_m\in\mathbb R\)</span> and <span class="math inline">\(b(\cdot;\gamma_m)\)</span> are basis functions/models.</p></li>
+<li><p>Typically these models are fit by minimizing a loss function averaged over the training data: <span class="math display">\[\min_{\{\beta_m,\gamma_m\}_1^M}\sum_{i=1}^n L\Big(y_i, \sum_{m=1}^M\beta_m b(x_i;\gamma_m)\Big).~~~~~ (1)\]</span> <em>Example</em>: <span class="math inline">\(L(y, f(x)) = (y - f(x))^2\)</span>.</p></li>
+</ol>
+<h2 id="forward-stagewise-additive-modeling-1">Forward Stagewise Additive Modeling</h2>
+<ol style="list-style-type: decimal">
+<li>For many loss functions/basis functions, solving (1) is computationally intensive. A simple alternative is called <span style="color:DodgerBlue"><strong>forward stagewise modeling</strong></span>, which <span style="color:Crimson">approximates</span> the solution by sequentially adding new basis functions to the expansion without adjusting the parameters and coefficients of those that have already been added. <br><br> <font size="3" ,="" color="Blue"><strong>Algorithm 1</strong></font> <em>Forward Stagewise Additive Modeling (FSAM)</em>.</li>
+</ol>
+<blockquote>
+<ol style="list-style-type: lower-alpha">
+<li>Initialize <span class="math inline">\(f_0(x) = 0\)</span>.</li>
+<li>For <span class="math inline">\(m = 1\)</span> to <span class="math inline">\(M\)</span>:<br> &gt; (i). Compute <span class="math display">\[(\beta_m, \gamma_m) = \arg\min_{\beta,\gamma}\sum_{i=1}^nL(y_i,f_{m-1}(x_i)+\beta b(x_i;\gamma)).\]</span> &gt; (ii). Set <span class="math inline">\(f_m(x) = f_{m-1}(x) + \beta_m b(x; \gamma_m)\)</span>.</li>
+</ol>
+</blockquote>
 <ol start="2" style="list-style-type: decimal">
 <li>For squared-error loss, we have <span class="math display">\[L(y_i, f_{m-1}(x_i)+\beta b(x_i;\gamma)) = (\underbrace{y_i-f_{m-1}(x_i)}_{residual}-\beta b(x_i;\gamma))^2,\]</span> where <span class="math inline">\(y_i - f_{m-1}(x_i)\)</span> is simply the residual of the current model on the <span class="math inline">\(i\)</span>th observation. <br><br> Thus, in regression, we find <span class="math inline">\(\beta_m b(x; \gamma_m)\)</span> that <strong>best fits the current residuals</strong>.</li>
 </ol>

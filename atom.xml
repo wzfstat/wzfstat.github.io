@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://wzfstat.github.io/"/>
-  <updated>2017-07-25T03:09:41.496Z</updated>
+  <updated>2017-07-25T03:15:01.787Z</updated>
   <id>http://wzfstat.github.io/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://wzfstat.github.io/2017/07/18/boosting/"/>
     <id>http://wzfstat.github.io/2017/07/18/boosting/</id>
     <published>2017-07-19T03:18:26.000Z</published>
-    <updated>2017-07-25T03:09:41.496Z</updated>
+    <updated>2017-07-25T03:15:01.787Z</updated>
     
     <content type="html"><![CDATA[<h2 id="boosting-additive-model">Boosting: Additive Model</h2>
 <ol style="list-style-type: decimal">
@@ -28,6 +28,22 @@
 <li><p>Typically these models are fit by minimizing a loss function averaged over the training data: <span class="math display">\[\min_{\{\beta_m,\gamma_m\}_1^M}\sum_{i=1}^n L\Big(y_i, \sum_{m=1}^M\beta_m b(x_i;\gamma_m)\Big).~~~~~ (1)\]</span> <em>Example</em>: <span class="math inline">\(L(y, f(x)) = (y - f(x))^2\)</span>.</p></li>
 </ol>
 <h2 id="forward-stagewise-additive-modeling">Forward Stagewise Additive Modeling</h2>
+<ol style="list-style-type: decimal">
+<li>For many loss functions/basis functions, solving (1) is computationally intensive. A simple alternative is called <span style="color:DodgerBlue"><strong>forward stagewise modeling</strong></span>, which <span style="color:Crimson">approximates</span> the solution by sequentially adding new basis functions to the expansion without adjusting the parameters and coefficients of those that have already been added. <br><br> <font size="3" ,="" color="Blue"><strong>Algorithm 1</strong></font> <em>Forward Stagewise Additive Modeling (FSAM)</em>.</li>
+</ol>
+<blockquote>
+<ol style="list-style-type: lower-alpha">
+<li>Initialize <span class="math inline">\(f_0(x) = 0\)</span>.</li>
+<li>For <span class="math inline">\(m = 1\)</span> to <span class="math inline">\(M\)</span>:<br> &gt; (i). Compute <span class="math display">\[(\beta_m, \gamma_m) = \arg\min_{\beta,\gamma}\sum_{i=1}^nL(y_i,f_{m-1}(x_i)+\beta b(x_i;\gamma)).\]</span> &gt; (ii). Set <span class="math inline">\(f_m(x) = f_{m-1}(x) + \beta_m b(x; \gamma_m)\)</span>.</li>
+</ol>
+</blockquote>
+<a id="more"></a>
+<h2 id="boosting-additive-model-1">Boosting: Additive Model</h2>
+<ol style="list-style-type: decimal">
+<li><p>Boosting is a way of fitting an additive expansion in a set of elementary “basis” functions: <span class="math display">\[f(x) = \sum_{m=1}^M\beta_m b(x;\gamma_m),\]</span> where <span class="math inline">\(\beta_m\in\mathbb R\)</span> and <span class="math inline">\(b(\cdot;\gamma_m)\)</span> are basis functions/models.</p></li>
+<li><p>Typically these models are fit by minimizing a loss function averaged over the training data: <span class="math display">\[\min_{\{\beta_m,\gamma_m\}_1^M}\sum_{i=1}^n L\Big(y_i, \sum_{m=1}^M\beta_m b(x_i;\gamma_m)\Big).~~~~~ (1)\]</span> <em>Example</em>: <span class="math inline">\(L(y, f(x)) = (y - f(x))^2\)</span>.</p></li>
+</ol>
+<h2 id="forward-stagewise-additive-modeling-1">Forward Stagewise Additive Modeling</h2>
 <ol style="list-style-type: decimal">
 <li>For many loss functions/basis functions, solving (1) is computationally intensive. A simple alternative is called <span style="color:DodgerBlue"><strong>forward stagewise modeling</strong></span>, which <span style="color:Crimson">approximates</span> the solution by sequentially adding new basis functions to the expansion without adjusting the parameters and coefficients of those that have already been added. <br><br> <font size="3" ,="" color="Blue"><strong>Algorithm 1</strong></font> <em>Forward Stagewise Additive Modeling (FSAM)</em>.</li>
 </ol>
@@ -123,7 +139,19 @@
     
       &lt;h2 id=&quot;boosting-additive-model&quot;&gt;Boosting: Additive Model&lt;/h2&gt;
 &lt;ol style=&quot;list-style-type: decimal&quot;&gt;
-&lt;li&gt;&lt;p&gt;Boosting is a way of fitting a
+&lt;li&gt;&lt;p&gt;Boosting is a way of fitting an additive expansion in a set of elementary “basis” functions: &lt;span class=&quot;math display&quot;&gt;\[f(x) = \sum_{m=1}^M\beta_m b(x;\gamma_m),\]&lt;/span&gt; where &lt;span class=&quot;math inline&quot;&gt;\(\beta_m\in\mathbb R\)&lt;/span&gt; and &lt;span class=&quot;math inline&quot;&gt;\(b(\cdot;\gamma_m)\)&lt;/span&gt; are basis functions/models.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Typically these models are fit by minimizing a loss function averaged over the training data: &lt;span class=&quot;math display&quot;&gt;\[\min_{\{\beta_m,\gamma_m\}_1^M}\sum_{i=1}^n L\Big(y_i, \sum_{m=1}^M\beta_m b(x_i;\gamma_m)\Big).~~~~~ (1)\]&lt;/span&gt; &lt;em&gt;Example&lt;/em&gt;: &lt;span class=&quot;math inline&quot;&gt;\(L(y, f(x)) = (y - f(x))^2\)&lt;/span&gt;.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;forward-stagewise-additive-modeling&quot;&gt;Forward Stagewise Additive Modeling&lt;/h2&gt;
+&lt;ol style=&quot;list-style-type: decimal&quot;&gt;
+&lt;li&gt;For many loss functions/basis functions, solving (1) is computationally intensive. A simple alternative is called &lt;span style=&quot;color:DodgerBlue&quot;&gt;&lt;strong&gt;forward stagewise modeling&lt;/strong&gt;&lt;/span&gt;, which &lt;span style=&quot;color:Crimson&quot;&gt;approximates&lt;/span&gt; the solution by sequentially adding new basis functions to the expansion without adjusting the parameters and coefficients of those that have already been added. &lt;br&gt;&lt;br&gt; &lt;font size=&quot;3&quot; ,=&quot;&quot; color=&quot;Blue&quot;&gt;&lt;strong&gt;Algorithm 1&lt;/strong&gt;&lt;/font&gt; &lt;em&gt;Forward Stagewise Additive Modeling (FSAM)&lt;/em&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;blockquote&gt;
+&lt;ol style=&quot;list-style-type: lower-alpha&quot;&gt;
+&lt;li&gt;Initialize &lt;span class=&quot;math inline&quot;&gt;\(f_0(x) = 0\)&lt;/span&gt;.&lt;/li&gt;
+&lt;li&gt;For &lt;span class=&quot;math inline&quot;&gt;\(m = 1\)&lt;/span&gt; to &lt;span class=&quot;math inline&quot;&gt;\(M\)&lt;/span&gt;:&lt;br&gt; &amp;gt; (i). Compute &lt;span class=&quot;math display&quot;&gt;\[(\beta_m, \gamma_m) = \arg\min_{\beta,\gamma}\sum_{i=1}^nL(y_i,f_{m-1}(x_i)+\beta b(x_i;\gamma)).\]&lt;/span&gt; &amp;gt; (ii). Set &lt;span class=&quot;math inline&quot;&gt;\(f_m(x) = f_{m-1}(x) + \beta_m b(x; \gamma_m)\)&lt;/span&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/blockquote&gt;
     
     </summary>
     
@@ -138,13 +166,18 @@
     <updated>2017-07-19T03:13:14.097Z</updated>
     
     <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
+<h2 id="quick-start">Quick Start</h2>
+<h3 id="create-a-new-post">Create a new post</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
 <p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
+<h3 id="run-server">Run server</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
 <p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
+<h3 id="generate-static-files">Generate static files</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
 <p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
+<h3 id="deploy-to-remote-sites">Deploy to remote sites</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
 <p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
 ]]></content>
     
