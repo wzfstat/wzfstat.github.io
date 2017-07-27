@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://wzfstat.github.io/"/>
-  <updated>2017-07-25T03:23:40.855Z</updated>
+  <updated>2017-07-27T02:17:54.961Z</updated>
   <id>http://wzfstat.github.io/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://wzfstat.github.io/2017/07/18/boosting/"/>
     <id>http://wzfstat.github.io/2017/07/18/boosting/</id>
     <published>2017-07-19T03:18:26.000Z</published>
-    <updated>2017-07-25T03:23:40.855Z</updated>
+    <updated>2017-07-27T02:17:54.961Z</updated>
     
     <content type="html"><![CDATA[<h2 id="boosting-additive-model">Boosting: Additive Model</h2>
 <ol style="list-style-type: decimal">
@@ -28,11 +28,6 @@
 <li><p>Typically these models are fit by minimizing a loss function averaged over the training data: <span class="math display">\[\min_{\{\beta_m,\gamma_m\}_1^M}\sum_{i=1}^n L\Big(y_i, \sum_{m=1}^M\beta_m b(x_i;\gamma_m)\Big).~~~~~ (1)\]</span> <em>Example</em>: <span class="math inline">\(L(y, f(x)) = (y - f(x))^2\)</span>.</p></li>
 </ol>
 <a id="more"></a>
-<h2 id="boosting-additive-model-1">Boosting: Additive Model</h2>
-<ol style="list-style-type: decimal">
-<li><p>Boosting is a way of fitting an additive expansion in a set of elementary “basis” functions: <span class="math display">\[f(x) = \sum_{m=1}^M\beta_m b(x;\gamma_m),\]</span> where <span class="math inline">\(\beta_m\in\mathbb R\)</span> and <span class="math inline">\(b(\cdot;\gamma_m)\)</span> are basis functions/models.</p></li>
-<li><p>Typically these models are fit by minimizing a loss function averaged over the training data: <span class="math display">\[\min_{\{\beta_m,\gamma_m\}_1^M}\sum_{i=1}^n L\Big(y_i, \sum_{m=1}^M\beta_m b(x_i;\gamma_m)\Big).~~~~~ (1)\]</span> <em>Example</em>: <span class="math inline">\(L(y, f(x)) = (y - f(x))^2\)</span>.</p></li>
-</ol>
 <h2 id="forward-stagewise-additive-modeling">Forward Stagewise Additive Modeling</h2>
 <ol style="list-style-type: decimal">
 <li>For many loss functions/basis functions, solving (1) is computationally intensive. A simple alternative is called <span style="color:DodgerBlue"><strong>forward stagewise modeling</strong></span>, which <span style="color:Crimson">approximates</span> the solution by sequentially adding new basis functions to the expansion without adjusting the parameters and coefficients of those that have already been added. <br><br> <font size="3" ,="" color="Blue"><strong>Algorithm 1</strong></font> <em>Forward Stagewise Additive Modeling (FSAM)</em>.</li>
@@ -121,7 +116,7 @@
 </ol>
 </blockquote>
 <ol start="2" style="list-style-type: decimal">
-<li><strong>Subsampling (stochastic gradient boosting):</strong>At each iteration we sample a subset of the training observations without replacement. (Not only reduce the computing time, but produce a more accurate model in many cases.)</li>
+<li><strong>Subsampling (stochastic gradient boosting):</strong> At each iteration we sample a subset of the training observations without replacement. (Not only reduce the computing time, but produce a more accurate model in many cases.)</li>
 </ol>
 ]]></content>
     
